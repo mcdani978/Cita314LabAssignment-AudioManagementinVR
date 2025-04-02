@@ -36,6 +36,12 @@ public class TheWall : MonoBehaviour
 
     [SerializeField] bool destroyWall;
 
+    [SerializeField] int maxPower;
+
+    [SerializeField] AudioClip destroyWallClip;
+
+    public AudioClip GetDestroyClip => destroyWallClip;
+
     // Array to store wall cubes
     [SerializeField] GameObject[] wallCubes;
 
