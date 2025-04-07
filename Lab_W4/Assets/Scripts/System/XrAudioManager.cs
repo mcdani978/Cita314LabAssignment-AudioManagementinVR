@@ -108,11 +108,25 @@ public class XrAudioManager : MonoBehaviour
         drawerSound.lopp = true;
         drawer.selectEntered.AddListener(OnDrawerMove);
         drawer.selectExited.AddListener(OnDrawerStop);
+        drawerSocket = drawer.GetKeySocket;
+        if(drawerSocket != null)
+        {
+            drawerSocketSound = drawerSocket.transform.AddComponent<AudioSource>();
+            drawerSocket.SelectEntered.AddListner(OnDrawerSocketed);
+            drawerSocketClip = drawer.GetSocketedClip;
+            CheckClip(drawerSocketClip);
+            drawerSocketSound.clip = drawerSocketClip;
+        }
+    }
+
+    private void OnDrawerSocketed(SelectEnterEventArgs arg0)
+    {
+
     }
 
     private void SetWall()
     {
-
+        drawerSocketSound.Play();
     }
 
     private void OnDrawerMove(SelectEnterEventArgs arg0)

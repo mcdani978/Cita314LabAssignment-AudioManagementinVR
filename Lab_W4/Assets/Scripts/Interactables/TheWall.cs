@@ -20,6 +20,8 @@ public class TheWall : MonoBehaviour
 
     [SerializeField] XRSocketInteractor wallSocket;
 
+    public XRSocketInteractor GetWallSocket => wallSocket;
+
     [SerializeField] List<GeneratedColumn> generatedColumn;
 
     [SerializeField] float cubeSpacing = 0.005f;
@@ -34,6 +36,14 @@ public class TheWall : MonoBehaviour
     [SerializeField] int maxPower;
 
     [SerializeField] AudioClip destroyWallClip;
+
+    [SerializeField] AudioClip socketClip;
+
+    [SerializeField] XRSocketInteractor wallSocket;
+
+ 
+
+    public AudioClip GetSocketedClip => socketClip;
 
     public AudioClip GetDestroyClip => destroyWallClip;
 
