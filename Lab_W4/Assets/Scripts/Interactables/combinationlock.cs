@@ -17,6 +17,12 @@ public class combinationlock : MonoBehaviour
 
     private void OnLocked() => LockAction?.Invoke();
 
+    public UnityAction ComboButtonPressed;
+
+    private void OnComboButtonPressed() => ComboButtonPressed?.Invoke();    
+
+    private void OnLocked() => LockAction?.Invoke();
+
     [SerializeField] TMP_Text userInputText;
 
     [SerializeField] XrButtoninteractable[] comboButtons;
@@ -45,7 +51,19 @@ public class combinationlock : MonoBehaviour
 
     [SerializeField] int[] comboValues = new int[3];
 
+    public AudioClip GetLockClip => lockComboClip;
+
     private int[] inputValues;
+
+    public AudioClip GetUnlockClip => unlockComboClip;
+
+    public AudioClip GetComboPressedClip => comboButtonPressedClip;
+
+    [SerializeField] AudioClip lockComboClip;
+
+    [SerializeField] AudioClip unlockComboClip;
+
+    [SerializeField] AudioClip comboButtonPressedClip;
 
     private int maxButtonPresses;
 
@@ -87,6 +105,11 @@ public class combinationlock : MonoBehaviour
             if (comboButtons[i] != null) // Ensure it exists before calling
             {
                 comboButtons[i].ResetColor();
+            }
+
+            else
+            {
+                OnComboButtonPressed();
             }
         }
 

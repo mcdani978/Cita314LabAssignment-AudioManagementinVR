@@ -27,6 +27,18 @@ public class XrAudioManager : MonoBehaviour
     [SerializeField] AudioSource[] cabinetDoorSound;
     [SerializeField] AudioClip cabinetDoorMoveClip;
 
+    [SerializeField] AudioClip lockComboClip;
+
+    [SerializeField] AudioClip unlockComboClip;
+
+    [SerializeField] AudioClip comboButtonPressedClip;
+
+    [Header("Combo Lock")]
+    [SerializeField] combinationlock comboLock;
+
+    [SerializeField] AudioSource combinationlockSound;
+
+
     [Header("The Wall")]
     [SerializeField] private TheWall wall;           // Reference to TheWall component
     [SerializeField] private AudioSource wallSource; // AudioSource to play sound
