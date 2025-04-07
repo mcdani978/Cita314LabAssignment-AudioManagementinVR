@@ -19,15 +19,11 @@ public abstract class DoorInteractable : SimpleHingeInteractable
     {
         base.Start();
 
-        startRotation = transform.localEulerAngles;  // Store the initial rotation
-        startAngleX = startRotation.x;
+        // Initialize the door's starting rotation
+        startRotation = transform.localEulerAngles;
+        startAngleX = GetAngle(startRotation.x);
 
-        if (startAngleX >= 180)
-        {
-            startAngleX -= 360;
-        }
-
-        // Replacing the missing CombinationLock logic with basic lock/unlock functionality
+        // Lock or unlock the door based on the initial state
         if (isLocked)
         {
             OnLocked();
@@ -55,13 +51,15 @@ public abstract class DoorInteractable : SimpleHingeInteractable
 
         if (doorObject != null)
         {
+            // Keep doorObject's rotation synchronized with the base hinge rotation
             doorObject.localEulerAngles = new Vector3(
                 doorObject.localEulerAngles.x,
-                transform.localEulerAngles.y,  // Ensures rotation follows the base hinge
+                transform.localEulerAngles.y,  // Keeps y-axis rotation synchronized
                 doorObject.localEulerAngles.z
             );
         }
 
+        // If the door is selected, check the rotation limits
         if (isSelected)
         {
             CheckLimits();
@@ -71,9 +69,10 @@ public abstract class DoorInteractable : SimpleHingeInteractable
     private void CheckLimits()
     {
         isClosed = false;
-        float localAngleX = transform.localEulerAngles.x;
-        if (localAngleX >= startAngleX + rotationLimits.x ||
-            localAngleX <= startAngleX - rotationLimits.x)
+        float localAngleX = GetAngle(transform.localEulerAngles.x);
+
+        // Ensure the door does not exceed the rotation limits
+        if (localAngleX >= startAngleX + rotationLimits.x || localAngleX <= startAngleX - rotationLimits.x)
         {
             ReleaseHinge();
         }
@@ -81,6 +80,7 @@ public abstract class DoorInteractable : SimpleHingeInteractable
 
     private float GetAngle(float angle)
     {
+        // Normalize the angle to the range -180 to 180
         if (angle >= 180)
         {
             angle -= 360;
@@ -90,13 +90,14 @@ public abstract class DoorInteractable : SimpleHingeInteractable
 
     protected override void ResetHinge()
     {
+        // Reset to the start rotation if the door is closed
         if (isClosed)
         {
             transform.localEulerAngles = startRotation;
         }
     }
 
-    // Abstract methods for the base class
+    // Abstract methods for the base class that need to be implemented
     protected abstract void LockHinge();
     protected abstract void UnlockHinge();
     protected abstract void ReleaseHinge();

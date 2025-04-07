@@ -2,12 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
+using UnityEngine.Events;
 
 [RequireComponent(typeof(Collider))]
 [RequireComponent(typeof(Rigidbody))]
 
 public abstract class SimpleHingeInteractable : XRSimpleInteractable
 {
+    public UnityEvent<SimpleHingeInteractable> OnHingeSelected;
+
     [SerializeField] Vector3 positionLimits;
 
     private Transform grabHand;
@@ -16,7 +19,13 @@ public abstract class SimpleHingeInteractable : XRSimpleInteractable
 
     private Vector3 hingePositions;
 
+   
+
     [SerializeField] bool isLocked;
+
+    [SerializeField] AudioClip hingeMoveClip;
+
+    public AudioClip GetHingeMoveClip => hingeMoveClip;
 
     private const string Default_Layer = "Default";
 
@@ -49,10 +58,11 @@ public abstract class SimpleHingeInteractable : XRSimpleInteractable
 
     protected override void OnSelectEntered(SelectEnterEventArgs args)
     {
-        if (isLocked)
+        if (!isLocked)
         {
             base.OnSelectEntered(args);
             grabHand = args.interactorObject.transform;
+            OnHingeSelected?.Invoke(this);
         }
 
     }
