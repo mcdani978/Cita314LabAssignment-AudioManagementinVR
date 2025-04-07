@@ -13,6 +13,10 @@ public class DrawerInteractable : XRGrabInteractable
     [SerializeField] private bool isLocked;
     [SerializeField] private Vector3 limitDistances = new Vector3(.02f, .02f, 0);
 
+    [SerializeField] AudioClip drawerMoveClip;
+
+    public AudioClip GetDrawerMoveClip => drawerMoveClip;
+
   
     private Transform parentTransform;
     private Vector3 limitPositions;

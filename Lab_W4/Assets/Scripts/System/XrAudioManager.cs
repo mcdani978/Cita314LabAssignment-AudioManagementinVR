@@ -1,11 +1,14 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 
 public class XrAudioManager : MonoBehaviour
 {
+    [Header("Grab Interactables")]
+
     [SerializeField] XRGrabInteractable[] grabInteractables;
 
     [SerializeField] AudioSource grabSound;
@@ -20,7 +23,15 @@ public class XrAudioManager : MonoBehaviour
 
     [SerializeField] AudioClip wandActivatedClip;
 
+    [Header("Drawer Interactables")]
 
+    [SerializeField] DrawerInteractable drawer;
+
+    [SerializeField] AudioSource drawerSound;
+
+    [SerializeField] AudioClip drawerMoveClip;
+
+    [Header("The Wall")]
 
     [SerializeField] private TheWall wall;           // Reference to TheWall component
     [SerializeField] private AudioSource wallSource; // AudioSource to play sound
@@ -31,14 +42,10 @@ public class XrAudioManager : MonoBehaviour
 
     private void OnEnable()
     {
+        SetGrabbables();
         grabInteractables = FindObjectsByType<XRGrabInteractable>(FindObjectsSortMode.None);
 
-        for (int i = 0; i < grabInteractables.Length; i++)
-        {
-            grabInteractables[i].selectEntered.AddListener(OnSelectEnterGrabbable);
-            grabInteractables[i].selectExited.AddListener(OnSelectExitGrabbable);
-            //grabInteractables[i].activated.AddListener(OnActivatedGrabbable);
-        }
+      
 
         // If the fallback clip is not set, create it with a simple silent clip (1 sample, 44100 Hz, 1 channel)
         if (fallBackClip == null)
@@ -58,16 +65,64 @@ public class XrAudioManager : MonoBehaviour
         {
             destroyWallClip = fallBackClip;
         }
+        drawerSound.clip = drawerMoveClip;
 
         // Add listener to the OnDestroy event of the wall
         if (wall.OnDestroy != null)
         {
             wall.OnDestroy.AddListener(OnDestroyWall);
         }
+
+        if (drawer != null)
+        {
+            SetDrawerInteractables();
+
+        }
         else
         {
             Debug.LogWarning("OnDestroy event in 'TheWall' is not set up!");
         }
+    }
+
+    private void SetGrabbables()
+    {
+        for (int i = 0; i < grabInteractables.Length; i++)
+        {
+            grabInteractables[i].selectEntered.AddListener(OnSelectEnterGrabbable);
+            grabInteractables[i].selectExited.AddListener(OnSelectExitGrabbable);
+            //grabInteractables[i].activated.AddListener(OnActivatedGrabbable);
+        }
+    }
+
+    private void CheckClip(AudioClip clip)
+    {
+        clip = fallBackClip;
+    }
+
+    private void SetDrawerInteractables()
+    {
+        drawerSound = drawer.transform.AddComponent<AudioSource>();
+        drawerMoveClip = drawer.GetDrawerMoveClip;
+        CheckClip(drawerMoveClip);
+        drawerSound.clip = drawerMoveClip;
+        drawerSound.lopp = true;
+        drawer.selectEntered.AddListener(OnDrawerMove);
+        drawer.selectExited.AddListener(OnDrawerStop);
+    }
+
+    private void SetWall()
+    {
+
+    }
+
+    private void OnDrawerMove(SelectEnterEventArgs arg0)
+    {
+        drawerSound.Play();
+    }
+
+    private void OnDrawerStop(SelectEnterEventArgs argo)
+    {
+        drawerSound.Stop();
     }
 
     private void OnSelectEnterGrabbable(SelectEnterEventArgs arg0)
