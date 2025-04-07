@@ -1,19 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Xml.Xsl;
 using UnityEngine;
-using UnityEngine.UIElements;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.Events;
 
 [ExecuteAlways]
-
 public class TheWall : MonoBehaviour
 {
-    public UnityEvent OnDestory;
+    // UnityEvent for handling wall destruction
+    public UnityEvent OnDestroy; // Fixed typo from OnDestory to OnDestroy
 
     [SerializeField] int columns;
-
     [SerializeField] int rows;
 
     [SerializeField] GameObject wallCubePrefab;
@@ -31,9 +28,7 @@ public class TheWall : MonoBehaviour
     private Vector3 spawnPosition;
 
     [SerializeField] bool buildWall;
-
     [SerializeField] bool deleteWall;
-
     [SerializeField] bool destroyWall;
 
     [SerializeField] int maxPower;
@@ -47,7 +42,7 @@ public class TheWall : MonoBehaviour
 
     void Start()
     {
-
+        // Optionally initialize anything on start if necessary
     }
 
     private void BuildWall()
@@ -67,10 +62,7 @@ public class TheWall : MonoBehaviour
 
     private void GenerateColumn(int height, bool socketed)
     {
-
         GeneratedColumn tempColumn = new GeneratedColumn();
-
-
         tempColumn.InitializeColumn(transform, height, true);
 
         wallCubes = new GameObject[2];  // Set the number of cubes to 2, can be increased based on the wall design
@@ -107,7 +99,7 @@ public class TheWall : MonoBehaviour
 
     private void AddSocketWall(GeneratedColumn socketedColumn)
     {
-
+        // Logic for adding socket wall can be added here
     }
 
     private void OnSocketExited(SelectExitEventArgs arg0)
@@ -129,27 +121,44 @@ public class TheWall : MonoBehaviour
     private void OnSocketEnter(SelectEnterEventArgs arg0)
     {
         if (generatedColumn.Count >= 1)
-        { 
-            for (int i = 0;i < wallCubes.Length;i++)
+        {
+            for (int i = 0; i < wallCubes.Length; i++)
             {
                 generatedColumn[i].DeleteColumn();
             }
         }
-        OnDestory?.Invoke();
-        
+
+        // Invoke the OnDestroy event when the socketed wall is interacted with
+        OnDestroy?.Invoke();  // Fixed typo from OnDestory to OnDestroy
+    }
+
+    // Method to destroy the wall, invoking the OnDestroy event
+    private void DestroyWall()
+    {
+        OnDestroy?.Invoke(); // Trigger event before any other logic
+
+        // Example of any other destruction logic you'd want to add (like destroying GameObjects)
+        Destroy(gameObject);  // Destroy this wall object
     }
 
     // Update is called once per frame (empty for now)
     void Update()
     {
-        if(buildWall)
+        if (buildWall)
         {
             buildWall = false;
             BuildWall();
+        }
 
+        // If the wall is set to be destroyed, call the DestroyWall method
+        if (destroyWall)
+        {
+            destroyWall = false;
+            DestroyWall();
         }
     }
 }
+
 [System.Serializable]
 public class GeneratedColumn
 {
@@ -158,7 +167,6 @@ public class GeneratedColumn
     [SerializeField] bool isSocketed;
 
     private Transform parentObject;
-
 
     private const string Column_Name = "column";
 
@@ -173,18 +181,17 @@ public class GeneratedColumn
     {
         for (int i = 0; i < wallCubes.Length; i++)
         {
-            if(i == 0)
+            if (i == 0)
             {
                 cube.name = Column_Name;
                 cube.transform.SetParent(parentObject);
             }
-
             else
             {
                 cube.transform.SetParent(wallCubes[0].transform);
             }
 
-            if(wallCubes[i] != null)
+            if (wallCubes[i] != null)
             {
                 wallCubes[i] = cube;
                 break;
@@ -194,13 +201,12 @@ public class GeneratedColumn
 
     public void DeleteColumn()
     {
-        for (int i = 0;i < wallCubes.Length;i++)
+        for (int i = 0; i < wallCubes.Length; i++)
         {
             if (wallCubes[i] != null)
             {
                 Object.DestroyImmediate(wallCubes[i]);
             }
-
         }
         wallCubes = new GameObject[0];
     }
@@ -210,8 +216,8 @@ public class GeneratedColumn
         for (int i = 0; i < wallCubes.Length; i++)
         {
             if (wallCubes[i] == null)
-            { 
-                Rigidbody rb = wallCubes [i].GetComponent<Rigidbody>(); 
+            {
+                Rigidbody rb = wallCubes[i].GetComponent<Rigidbody>();
                 rb.isKinematic = false;
             }
         }
