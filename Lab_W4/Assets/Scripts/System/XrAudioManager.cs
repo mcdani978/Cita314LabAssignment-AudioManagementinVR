@@ -75,7 +75,7 @@ public class XrAudioManager : MonoBehaviour
 
         if (drawer != null)
         {
-            SetDrawerInteractables();
+            //SetDrawerInteractables();
 
         }
         else
@@ -99,25 +99,25 @@ public class XrAudioManager : MonoBehaviour
         clip = fallBackClip;
     }
 
-    private void SetDrawerInteractables()
-    {
-        drawerSound = drawer.transform.AddComponent<AudioSource>();
-        drawerMoveClip = drawer.GetDrawerMoveClip;
-        CheckClip(drawerMoveClip);
-        drawerSound.clip = drawerMoveClip;
-        drawerSound.lopp = true;
-        drawer.selectEntered.AddListener(OnDrawerMove);
-        drawer.selectExited.AddListener(OnDrawerStop);
-        drawerSocket = drawer.GetKeySocket;
-        if(drawerSocket != null)
-        {
-            drawerSocketSound = drawerSocket.transform.AddComponent<AudioSource>();
-            drawerSocket.SelectEntered.AddListner(OnDrawerSocketed);
-            drawerSocketClip = drawer.GetSocketedClip;
-            CheckClip(drawerSocketClip);
-            drawerSocketSound.clip = drawerSocketClip;
-        }
-    }
+    //private void SetDrawerInteractables()
+    //{
+    //    drawerSound = drawer.transform.AddComponent<AudioSource>();
+    //    drawerMoveClip = drawer.GetDrawerMoveClip;
+    //    CheckClip(drawerMoveClip);
+    //    drawerSound.clip = drawerMoveClip;
+    //    drawerSound.lopp = true;
+    //    drawer.selectEntered.AddListener(OnDrawerMove);
+    //    drawer.selectExited.AddListener(OnDrawerStop);
+    //    drawerSocket = drawer.GetKeySocket;
+    //    //if(drawerSocket != null)
+    //    //{
+    //    //    drawerSocketSound = drawerSocket.transform.AddComponent<AudioSource>();
+    //    //    drawerSocket.SelectEntered.AddListner(OnDrawerSocketed);
+    //    //    drawerSocketClip = drawer.GetSocketedClip;
+    //  //      CheckClip(drawerSocketClip);
+    //  //      drawerSocketSound.clip = drawerSocketClip;
+    //    }
+    //}
 
     private void OnDrawerSocketed(SelectEnterEventArgs arg0)
     {
@@ -126,7 +126,7 @@ public class XrAudioManager : MonoBehaviour
 
     private void SetWall()
     {
-        drawerSocketSound.Play();
+        //drawerSocketSound.Play();
     }
 
     private void OnDrawerMove(SelectEnterEventArgs arg0)

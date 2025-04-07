@@ -39,7 +39,7 @@ public class TheWall : MonoBehaviour
 
     [SerializeField] AudioClip socketClip;
 
-    [SerializeField] XRSocketInteractor wallSocket;
+    //[SerializeField] XRSocketInteractor wallSocket;
 
  
 
